@@ -64,7 +64,8 @@ static int elevator_thread(void *data)
                         action = MOVE;
                 break;
                 case IDLE:
-                    if (!ele->stopping && has_request_here(&floors[ele->current_floor], ele->state)) {
+                    if (!ele->stopping &&
+                        has_request_here(&floors[ele->current_floor], ele->state)) {
                         prev_state = ele->state;
                         ele->state = LOADING;
                         action = LOAD;
@@ -75,7 +76,9 @@ static int elevator_thread(void *data)
                     }
                 break;
                 case UP: case DOWN:
-                    if (has_destination_here(&ele->passengers, ele->current_floor) || (!ele->stopping && has_request_here(&floors[ele->current_floor], ele->state))) {
+                    if (has_destination_here(&ele->passengers, ele->current_floor) ||
+                        (!ele->stopping &&
+                         has_request_here(&floors[ele->current_floor], ele->state))) {
                         prev_state = ele->state;
                         ele->state = LOADING;
                         action = LOAD;
@@ -113,15 +116,18 @@ int elevator_thread_start(void) {
         return 1;
     }
     ele->state = IDLE;
-    mutex_unlock(&ele->lock);
 
     if (!elevator_task) {
         elevator_task = kthread_run(elevator_thread, NULL, "elevator_thread");
         if (IS_ERR(elevator_task)) {
             elevator_task = NULL;
+            ele->state = OFFLINE;
+            ele->stopping = 0;
+            mutex_unlock(&ele->lock);
             return -ENOMEM;
         }
     }
+    mutex_unlock(&ele->lock);
     return 0;
 }
 
@@ -247,9 +253,11 @@ int find_nearest_request(struct floor *floors, int current_floor) {
 
 enum State elevator_scan(struct elevator *ele, enum State cur){
     if (cur == UP) {
-        if (has_request_above(floors, ele->current_floor) || has_destination_above(&ele->passengers, ele->current_floor)) {
+        if (has_request_above(floors, ele->current_floor) ||
+            has_destination_above(&ele->passengers, ele->current_floor)) {
             return UP;
-        } else if (has_request_below(floors, ele->current_floor) || has_destination_below(&ele->passengers, ele->current_floor)) {
+        } else if (has_request_below(floors, ele->current_floor) ||
+                   has_destination_below(&ele->passengers, ele->current_floor)) {
             return DOWN;
         } else {
             return IDLE;
@@ -257,9 +265,11 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
     }
     
     if (cur == DOWN) {
-        if (has_request_below(floors, ele->current_floor) || has_destination_below(&ele->passengers, ele->current_floor)) {
+        if (has_request_below(floors, ele->current_floor) ||
+            has_destination_below(&ele->passengers, ele->current_floor)) {
             return DOWN;
-        } else if (has_request_above(floors, ele->current_floor) || has_destination_above(&ele->passengers, ele->current_floor)) {
+        } else if (has_request_above(floors, ele->current_floor) ||
+                   has_destination_above(&ele->passengers, ele->current_floor)) {
             return UP;
         } else {
             return IDLE;
