@@ -2,11 +2,11 @@
 
 **Group 8**
 
+> **Slack day:** We are using 1 slack day for this project.
+
 A Linux kernel project in three parts. Part 1 traces system calls with `strace`. Part 2 is a `my_timer` kernel module that reports the current time and the time since the last read through `/proc/timer`. Part 3 adds three system calls to Linux 6.16.6 and implements a pet elevator kernel module: a kthread moves the elevator between five floors, a mutex protects the shared floor and elevator lists, and `/proc/elevator` shows the elevator's state.
 
 ## Table of Contents
-- [Pet Elevator (COP4610 Project 2)](#pet-elevator-cop4610-project-2)
-  - [Table of Contents](#table-of-contents)
   - [Group Members](#group-members)
   - [Division of Labor](#division-of-labor)
     - [Part 1: System Call Tracing](#part-1-system-call-tracing)
