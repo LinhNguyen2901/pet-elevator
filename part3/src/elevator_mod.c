@@ -17,9 +17,12 @@ MODULE_VERSION("1.0");
 #define PARENT NULL
 #define BUF_LEN 10000
 
-int start_elevator(void);                                                           // starts the elevator to pick up and drop off passengers
-int issue_request(int start_floor, int destination_floor, int type);                // add passengers requests to specific floors
-int stop_elevator(void);                                                            // stops the elevator
+// Starts the elevator to pick up and drop off passengers.
+int start_elevator(void);
+// Adds a pet request to the specified floors.
+int issue_request(int start_floor, int destination_floor, int type);
+// Stops the elevator after unloading current passengers.
+int stop_elevator(void);
 
 static struct proc_dir_entry* proc_entry;
 
