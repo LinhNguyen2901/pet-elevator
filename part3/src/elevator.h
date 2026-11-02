@@ -47,6 +47,7 @@ int has_destination_below(struct list_head *pets, int f);
 
 int has_request_here(struct floor *floor, enum State cur);
 int find_nearest_request(struct floor *floors, int current_floor);
+int find_nearest_destination(struct list_head *pets, int f);
 
 void elevator_thread_kill(void);
 void elevator_free_all_pets(void);

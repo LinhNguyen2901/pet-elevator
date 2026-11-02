@@ -240,9 +240,9 @@ int find_nearest_request(struct floor *floors, int current_floor) {
         int up = current_floor + distance;
         int down = current_floor - distance;
 
-        if (up < NUM_FLOOR && !list_empty(&floors[up].list))
+        if (up < NUM_FLOOR && has_request_here(&floors[up], IDLE))
             return up;
-        if (down >= 0 && !list_empty(&floors[down].list))
+        if (down >= 0 && has_request_here(&floors[down], IDLE))
             return down;
         
         distance++;
@@ -251,8 +251,23 @@ int find_nearest_request(struct floor *floors, int current_floor) {
     return -1;
 }
 
+int find_nearest_destination(struct list_head *pets, int f){
+    int out = NUM_FLOOR;
+    int distance = NUM_FLOOR;
+    struct list_head * temp; struct pet * item;
+    list_for_each(temp, pets) {
+        item = list_entry(temp, struct pet, list);
+        if (abs(item->destination_floor - ele->current_floor) < distance){
+            out = item->destination_floor;
+            distance = abs(item->destination_floor - ele->current_floor);
+        }
+    }
+    return distance == NUM_FLOOR? 0 : out;
+}
+
 enum State elevator_scan(struct elevator *ele, enum State cur){
-    if (cur == UP) {
+    switch (cur) {
+    case UP:
         if (has_request_above(floors, ele->current_floor) ||
             has_destination_above(&ele->passengers, ele->current_floor)) {
             return UP;
@@ -262,9 +277,9 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
         } else {
             return IDLE;
         }
-    }
+    break;
     
-    if (cur == DOWN) {
+    case DOWN:
         if (has_request_below(floors, ele->current_floor) ||
             has_destination_below(&ele->passengers, ele->current_floor)) {
             return DOWN;
@@ -274,29 +289,21 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
         } else {
             return IDLE;
         }
-    }
+    break;
     
-    if (cur == IDLE) {
-        if (has_destination_above(&ele->passengers, ele->current_floor))
-            return UP;
-        if (has_destination_below(&ele->passengers, ele->current_floor))
-            return DOWN;
+    case IDLE:
+        int target = find_nearest_destination(&ele->passengers, ele->current_floor);
 
-        int target = find_nearest_request(floors, ele->current_floor);
-        struct pet *first;
-
-        // nobody waiting -> stay IDLE
-        if (target < 0)
-            return IDLE;
-        if (target > ele->current_floor) return UP;
-        if (target < ele->current_floor) return DOWN;
-
-        // someone waiting on THIS floor -> go the way the first pet wants
-        first = list_first_entry(&floors[target].list, struct pet, list);
-        return (first->destination_floor > ele->current_floor) ? UP : DOWN;
-    }
+        if (target < 0 || target == ele->current_floor) {
+            // no destinations, check where the nearest request is
+            target = find_nearest_request(floors, ele->current_floor);
+            return (target < 0 || target == ele->current_floor) ? IDLE : (target > ele->current_floor) ? UP : DOWN;
+        }
+        return (target > ele->current_floor) ? UP : DOWN;
+    break;
     
-    return IDLE;
+    default: return IDLE;
+    }
 }
 
 
