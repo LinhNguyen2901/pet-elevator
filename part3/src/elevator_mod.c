@@ -39,25 +39,25 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf, size_t count,
     int len = 0;
     ssize_t ret;
 
-    buf = kmalloc(BUF_LEN, GFP_KERNEL);
+    buf = kmalloc(PROC_BUF_LEN, GFP_KERNEL);
     if (!buf)
         return -ENOMEM;
 
     mutex_lock(&ele->lock);
     
-    len = sprintf(buf, "Elevator state: %s\n", STATE_NAME[ele->state]);
-    len += sprintf(buf + len, "Current floor: %d\n", ele->current_floor + 1);
-    len += sprintf(buf + len, "Current load: %d lbs\n", ele->current_weight);
-    len += sprintf(buf + len, "Elevator status: ");
+    len = scnprintf(buf, PROC_BUF_LEN, "Elevator state: %s\n", STATE_NAME[ele->state]);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Current floor: %d\n", ele->current_floor + 1);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Current load: %d lbs\n", ele->current_weight);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Elevator status: ");
     format_passengers(ele, buf, &len);
-    len += sprintf(buf + len, "\n\n");
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "\n\n");
 
     for (int i = NUM_FLOOR - 1; i >= 0; i--)
         format_floor(ele->current_floor, &floors[i], buf, &len);
 
-    len += sprintf(buf + len, "\nNumber of pets: %d\n", ele->pet_count);
-    len += sprintf(buf + len, "Number of pets waiting: %d\n", get_waiting(floors));
-    len += sprintf(buf + len, "Number of pets serviced: %d\n", ele->serviced);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "\nNumber of pets: %d\n", ele->pet_count);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Number of pets waiting: %d\n", get_waiting(floors));
+    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Number of pets serviced: %d\n", ele->serviced);
 
     mutex_unlock(&ele->lock);
 

@@ -38,7 +38,7 @@ int format_passengers(struct elevator *e, char *buf, int *offset) {
     struct pet *item;
     list_for_each(temp, &e->passengers) {
         item = list_entry(temp, struct pet, list);
-        *offset += sprintf(buf + *offset, "%c%d ", item->type, item->destination_floor+1);
+        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ", item->type, item->destination_floor+1);
     } 
     return *offset;
 }

@@ -2,6 +2,7 @@
 #define ELEVATOR_H
 #define MAX_WEIGHT 50
 #define MAX_PASSENGERS 5
+#define PROC_BUF_LEN 10000
 
 #include <linux/mutex.h>
 #include "pet.h"
