@@ -262,7 +262,7 @@ int find_nearest_destination(struct list_head *pets, int f){
             distance = abs(item->destination_floor - ele->current_floor);
         }
     }
-    return distance == NUM_FLOOR? 0 : out;
+    return distance == NUM_FLOOR? -1 : out;
 }
 
 enum State elevator_scan(struct elevator *ele, enum State cur){
