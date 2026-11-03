@@ -57,9 +57,9 @@ static int elevator_thread(void *data)
             switch (ele->state){
                 case LOADING:
                     elevator_unload(ele, &floors[ele->current_floor]);
-                    ele->state = elevator_scan(ele, prev_state);
                     if (!ele->stopping)
-                        elevator_load(ele, &floors[ele->current_floor], ele->state);
+                        elevator_load(ele, &floors[ele->current_floor], prev_state);
+                    ele->state = elevator_scan(ele, prev_state);
                     if (ele->state == UP || ele->state == DOWN)
                         action = MOVE;
                 break;

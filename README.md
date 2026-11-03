@@ -221,7 +221,7 @@ sudo rmmod elevator
 | 2026-11-01 | Fixed the system call test build (PR #4) |
 | 2026-11-01 | Added and updated the Makefiles; set the top floor to 5; updated the Part 3 output and moved the proc buffer to the heap |
 | 2026-11-02 | Fixed elevator startup recovery and cleaned the project for submission (PR #5) |
-| 2026-11-03 | Tested the project and updated the README |
+| 2026-11-03 | Reproduced an elevator direction-reversal cycle with two requests; fixed loading to use the arrival direction before rescanning and verified both pets were serviced; tested the project and updated the README |
 
 ### Sid Nguyen
 | Date | Work done |
