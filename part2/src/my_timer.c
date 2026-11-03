@@ -9,7 +9,7 @@
 #include <linux/mutex.h>
 
 MODULE_AUTHOR("cop4610t");
-MODULE_DESCRIPTION("Elevator kernel module");
+MODULE_DESCRIPTION("Timer kernel module");
 MODULE_LICENSE("GPL");
 MODULE_VERSION("1.0");
 
