@@ -78,15 +78,16 @@ int format_floor(int current_floor, struct floor *f, char *buf, int *offset) {
     struct list_head *temp; 
     struct pet *item;
     
-    *offset += sprintf(buf + *offset, "[%c] Floor %d: %d ",
+    *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "[%c] Floor %d: %d ",
                        (current_floor == f->number) ? '*' : ' ',
                        f->number + 1, f->size);
 
     list_for_each(temp, &f->list) {
         item = list_entry(temp, struct pet, list);
-        *offset += sprintf(buf + *offset, "%c%d ", item->type, item->destination_floor+1);
+        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ",
+                             item->type, item->destination_floor + 1);
     } 
-    *offset += sprintf(buf + *offset, "\n");
+    *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "\n");
     
     return *offset;
 }
