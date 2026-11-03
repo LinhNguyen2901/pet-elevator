@@ -269,26 +269,14 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
     switch (cur) {
     case UP:
         if (has_request_above(floors, ele->current_floor) ||
-            has_destination_above(&ele->passengers, ele->current_floor)) {
+            has_destination_above(&ele->passengers, ele->current_floor))
             return UP;
-        } else if (has_request_below(floors, ele->current_floor) ||
-                   has_destination_below(&ele->passengers, ele->current_floor)) {
-            return DOWN;
-        } else {
-            return IDLE;
-        }
     break;
     
     case DOWN:
         if (has_request_below(floors, ele->current_floor) ||
-            has_destination_below(&ele->passengers, ele->current_floor)) {
+            has_destination_below(&ele->passengers, ele->current_floor))
             return DOWN;
-        } else if (has_request_above(floors, ele->current_floor) ||
-                   has_destination_above(&ele->passengers, ele->current_floor)) {
-            return UP;
-        } else {
-            return IDLE;
-        }
     break;
     
     case IDLE:
@@ -301,9 +289,8 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
         }
         return (target > ele->current_floor) ? UP : DOWN;
     break;
-    
-    default: return IDLE;
     }
+    return IDLE;
 }
 
 
