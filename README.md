@@ -229,7 +229,9 @@ sudo rmmod elevator
 | 2026-10-19 | Set up the lab VM account; added the starter files to the repository |
 | 2026-10-20 | Added the system calls, compiled and installed the 6.16.6 kernel, and tested it with the provided files |
 | 2026-10-21 | Part 1: `empty.c`, `part1.c` and both traces |
-| 2026-10-30 | Imported the project from the VM into GitHub; first working version of the elevator; fixed scheduling |
+| 2026-10-29 | Started 3d and 3f, set up structures, printing to procfile, and made the skeleton for SCAN scheduling |
+| 2026-10-30 | Imported the project from the VM into GitHub; first working version of the elevator; fixed scheduling to allow time delay |
+| 2026-11-01 | Fixed branch coverage for scan's IDLE branch |
 
 ## Group Meetings
 All three members took part in every meeting. Between meetings we kept in touch through a group chat.
