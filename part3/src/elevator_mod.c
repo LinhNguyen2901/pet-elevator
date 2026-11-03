@@ -76,7 +76,7 @@ int issue_request(int start_floor, int destination_floor, int type) {
     // invalid
     if (start_floor < 1 || start_floor > NUM_FLOOR ||
         destination_floor < 1 || destination_floor > NUM_FLOOR ||
-        type < 0 || type > 3)
+        start_floor == destination_floor || type < 0 || type > 3)
         return 1;
 
     p = pet_create(destination_floor - 1, type);
