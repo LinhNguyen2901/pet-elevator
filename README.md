@@ -17,6 +17,7 @@ A Linux kernel project in three parts. Part 1 traces system calls with `strace`.
     - [Part 3d: Linked List](#part-3d-linked-list)
     - [Part 3e: Mutexes](#part-3e-mutexes)
     - [Part 3f: Scheduling Algorithm](#part-3f-scheduling-algorithm)
+    - [Part 3: Elevator Setup](#part-3-elevator-setup)
     - [README/Documentation](#readmedocumentation)
   - [File Listing](#file-listing)
   - [How to Compile and Run](#how-to-compile-and-run)
@@ -25,7 +26,7 @@ A Linux kernel project in three parts. Part 1 traces system calls with `strace`.
     - [Part 3](#part-3)
   - [Features Implemented](#features-implemented)
   - [Implementation Notes](#implementation-notes)
-  - [Known Bugs and Limitations](#known-bugs-and-limitations)
+  - [Assumptions and Limitations](#assumptions-and-limitations)
   - [Development Log](#development-log)
     - [Jenny Jiang](#jenny-jiang)
     - [Linh Nguyen](#linh-nguyen)
@@ -71,11 +72,15 @@ A Linux kernel project in three parts. Part 1 traces system calls with `strace`.
 
 ### Part 3f: Scheduling Algorithm
 - **Description**: Decide the elevator's direction, board pets in FIFO order within the 5-pet / 50 lb limits, and wait 1 second when loading and 2 seconds when moving between floors.
-- **Completed by**: Linh Nguyen
+- **Completed by**: Linh Nguyen, Sid Nguyen
+
+### Part 3: Elevator Setup
+- **Description**: Set up the elevator and pet structures and project framework.
+- **Completed by**: Linh Nguyen, Sid Nguyen
 
 ### README/Documentation
 - **Description**: Write this README.
-- **Completed by**: Jenny Jiang
+- **Completed by**: Jenny Jiang, Linh Nguyen
 
 ## File Listing
 ```
@@ -97,8 +102,10 @@ pet-elevator/
 |   |   |-- elevator.h      struct elevator, states, function prototypes
 |   |   |-- pet.c           Pet and floor list helpers
 |   |   `-- pet.h           struct pet, struct floor, pet types and weights
-|   |-- syscalls.c          Kernel system call stubs (548-550)
-|   |-- tests/              Provided tests (system calls, producer/consumer)
+|   |-- syscalls/
+|   |   |-- syscalls.c
+|   |   `-- Makefile
+|   |-- tests/
 |   `-- Makefile            Builds elevator.ko
 |-- Makefile
 `-- README.md               This file
@@ -187,8 +194,7 @@ sudo rmmod elevator
 
 **Proc buffer.** The 10,000-byte output buffer is allocated with `kmalloc` instead of on the kernel stack, which is only 16 KB.
 
-## Known Bugs and Limitations
-- None known at the time of submission. [Update after final testing]
+## Assumptions and Limitations
 - The project assumes pets never go to the floor they start on, and that the proc output is at most 10,000 characters, as allowed by the assignment.
 
 ## Development Log
@@ -211,9 +217,11 @@ sudo rmmod elevator
 | 2026-10-16 | Created the GitHub repository |
 | 2026-10-21 | Finished and tested Part 2 (`my_timer`); proposed `struct pet` and `struct elevator` |
 | 2026-10-22 | Started the elevator kthread (3c) |
-| 2026-11-01 | Updated elevator timing; strict FIFO boarding; fixed the direction at the top and bottom floors (PR #2, #3) |
+| 2026-11-01 | Updated elevator scheduling and timing; strict FIFO boarding; fixed the direction at the top and bottom floors (PR #2, #3) |
 | 2026-11-01 | Fixed the system call test build (PR #4) |
+| 2026-11-01 | Added and updated the Makefiles; set the top floor to 5; updated the Part 3 output and moved the proc buffer to the heap |
 | 2026-11-02 | Fixed elevator startup recovery and cleaned the project for submission (PR #5) |
+| 2026-11-03 | Tested the project and updated the README |
 
 ### Sid Nguyen
 | Date | Work done |
@@ -222,12 +230,11 @@ sudo rmmod elevator
 | 2026-10-20 | Added the system calls, compiled and installed the 6.16.6 kernel, and tested it with the provided files |
 | 2026-10-21 | Part 1: `empty.c`, `part1.c` and both traces |
 | 2026-10-30 | Imported the project from the VM into GitHub; first working version of the elevator; fixed scheduling |
-| 2026-11-01 | Added and updated the Makefiles; set the top floor to 5; updated the Part 3 output and moved the proc buffer to the heap |
 
 ## Group Meetings
 All three members took part in every meeting. Between meetings we kept in touch through a group chat.
 
-**Meeting 1: early October 2026**
+**Meeting 1: October 8, 2026**
 We read through the assignment and divided the work. Following the recommendation, we listed two members for each part, but agreed that each of us would lead our own parts. Linh submitted the division of labor on Canvas by October 9. We also decided that we needed a lab VM, so that a broken kernel could be rolled back instead of breaking our own computers.
 
 **Meeting 2: October 14, 2026 (group chat)**
@@ -242,3 +249,7 @@ We met in a study room to plan Part 3 and catch up on Parts 1 and 2.
 - We walked through Part 2 together: how a kernel module is loaded and removed, how a proc file is created, and how reading `/proc/timer` calls our function. Linh finished and tested it that evening.
 - We agreed on the elevator data structures. Linh proposed `struct pet` (type, start floor, destination floor, weight, list node) and `struct elevator` (current floor, weight, pet count, state, passenger list, waiting lists, mutex), plus the main functions (add a request, load, unload, move).
 - We decided the order of work: system calls and kernel first, then the kthread, then the mutex and scheduling. Since we share one VM, we agreed to tell each other before loading a module or rebuilding the kernel.
+
+**Meeting 5: October 29, 2026**
+- We reviewed each person's progress and discussed how to test the system calls, kernel modules, and elevator behavior together on the VM.
+- We shared the challenges we were running into, identified current gaps and bugs, and agreed to focus on fixing them and retesting the full project.
