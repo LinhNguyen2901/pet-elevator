@@ -55,9 +55,12 @@ static ssize_t elevator_read(struct file *file, char __user *ubuf, size_t count,
     for (int i = NUM_FLOOR - 1; i >= 0; i--)
         format_floor(ele->current_floor, &floors[i], buf, &len);
 
-    len += scnprintf(buf + len, PROC_BUF_LEN - len, "\nNumber of pets: %d\n", ele->pet_count);
-    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Number of pets waiting: %d\n", get_waiting(floors));
-    len += scnprintf(buf + len, PROC_BUF_LEN - len, "Number of pets serviced: %d\n", ele->serviced);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len,
+                     "\nNumber of pets: %d\n", ele->pet_count);
+    len += scnprintf(buf + len, PROC_BUF_LEN - len,
+                     "Number of pets waiting: %d\n", get_waiting(floors));
+    len += scnprintf(buf + len, PROC_BUF_LEN - len,
+                     "Number of pets serviced: %d\n", ele->serviced);
 
     mutex_unlock(&ele->lock);
 

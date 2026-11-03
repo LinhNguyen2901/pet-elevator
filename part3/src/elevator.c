@@ -38,7 +38,8 @@ int format_passengers(struct elevator *e, char *buf, int *offset) {
     struct pet *item;
     list_for_each(temp, &e->passengers) {
         item = list_entry(temp, struct pet, list);
-        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ", item->type, item->destination_floor+1);
+        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ",
+                             item->type, item->destination_floor + 1);
     } 
     return *offset;
 }
@@ -279,16 +280,17 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
             return DOWN;
     break;
     
-    case IDLE:
+    case IDLE: {
         int target = find_nearest_destination(&ele->passengers, ele->current_floor);
 
         if (target < 0 || target == ele->current_floor) {
             // no destinations, check where the nearest request is
             target = find_nearest_request(floors, ele->current_floor);
-            return (target < 0 || target == ele->current_floor) ? IDLE : (target > ele->current_floor) ? UP : DOWN;
+            if (target < 0 || target == ele->current_floor)
+                return IDLE;
         }
         return (target > ele->current_floor) ? UP : DOWN;
-    break;
+    }
     }
     return IDLE;
 }

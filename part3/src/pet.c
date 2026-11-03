@@ -84,7 +84,8 @@ int format_floor(int current_floor, struct floor *f, char *buf, int *offset) {
 
     list_for_each(temp, &f->list) {
         item = list_entry(temp, struct pet, list);
-        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ", item->type, item->destination_floor+1);
+        *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "%c%d ",
+                             item->type, item->destination_floor + 1);
     } 
     *offset += scnprintf(buf + *offset, PROC_BUF_LEN - *offset, "\n");
     
