@@ -1,4 +1,5 @@
 *
+*.mod.c
 !Makefile
 !*.c
 !*.h
