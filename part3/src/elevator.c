@@ -291,6 +291,7 @@ enum State elevator_scan(struct elevator *ele, enum State cur){
         }
         return (target > ele->current_floor) ? UP : DOWN;
     }
+    default: break;
     }
     return IDLE;
 }
