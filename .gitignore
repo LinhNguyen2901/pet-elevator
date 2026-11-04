@@ -1,8 +1,8 @@
 *
-*.mod.c
 !Makefile
 !*.c
 !*.h
 !*/
 !*.trace
 !*.md
+*.mod.c
